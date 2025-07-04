@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GPT Bot</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px;
+      min-height: 100vh;
+      justify-content: space-between;
+    }
+
+    h1 {
+      color: #00ffcc;
+    }
+
+    form {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      background-color: #1e1e1e;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 4px;
+      font-size: 16px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #00ffcc;
+      color: black;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #00ccaa;
+    }
+
+    h2 {
+      margin-top: 20px;
+      color: #00ffcc;
+    }
+
+    #response {
+      background-color: #1e1e1e;
+      color: #ffffff;
+      padding: 15px;
+      border-radius: 5px;
+      width: 100%;
+      max-width: 600px;
+      white-space: pre-wrap;
+      border: 1px solid #444;
+    }
+
+    /* Footer style */
+    .footer {
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      margin-top: auto;
+      padding: 20px;
+    }
+
+    .contact-btn {
+      background-color: #ff4081;
+      padding: 10px 20px;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 15px;
+    }
+
+    .contact-btn:hover {
+      background-color: #ff1f60;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Chat with GPT</h1>
+
+  <form id="chat-form" method="post">
+    <textarea name="prompt" rows="5" cols="60" placeholder="Ask something..."></textarea><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <h2>Response:</h2>
+  <pre id="response">Response will appear here.</pre>
+
+  <!-- Footer with Contact Us Button -->
+  <div class="footer">
+    <p>Facing an error or want to leave feedback?</p>
+    <a href="{{ url_for('contact') }}" target="_blank" class="contact-btn">Contact Us</a>
+  </div>
+
+  <script>
+    document.getElementById("chat-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const prompt = formData.get("prompt");
+
+      const res = await fetch("/", {
+        method: "POST",
+        body: new URLSearchParams({ prompt }),
+      });
+
+      const data = await res.json();
+      document.getElementById("response").innerText = data.response || data.error;
+    });
+  </script>
+
+</body>
+</html>
